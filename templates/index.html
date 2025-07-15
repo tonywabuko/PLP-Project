@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patient Risk Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        header {
+            background: #0055a5;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .status-box {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .status {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .critical {
+            color: #d32f2f;
+        }
+
+        .stable {
+            color: #388e3c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background: #e0e0e0;
+        }
+
+        @media screen and (max-width: 600px) {
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            th {
+                display: none;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: left;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: bold;
+            }
+        }
+
+        .btn-toggle {
+            background: #0055a5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🩺 Patient Risk Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <div class="status-box">
+            <p class="status">
+                Risk Status:
+                <span class="{{ 'critical' if data.risk == 'CRITICAL' else 'stable' }}">
+                    {{ data.risk }}
+                </span>
+            </p>
+            <p>Missed Doses: {{ data.missed_doses }}</p>
+            {% if data.compliance_percent %}
+            <p>Compliance Rate: {{ data.compliance_percent }}%</p>
+            {% endif %}
+
+            <button class="btn-toggle" onclick="toggleTable()">📊 Show/Hide Records</button>
+        </div>
+
+        {% if data.records %}
+        <div id="data-table" style="display: none;">
+            <h3>Tagged Data</h3>
+            <table>
+                <thead>
+                    <tr>
+                        {% for key in data.records[0].keys() %}
+                        <th>{{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data.records %}
+                    <tr>
+                        {% for key, val in row.items() %}
+                        <td data-label="{{ key }}">{{ val }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleTable() {
+            const table = document.getElementById('data-table');
+            table.style.display = table.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+
+</html>
