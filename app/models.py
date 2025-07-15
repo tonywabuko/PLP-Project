@@ -22,4 +22,11 @@ def check_compliance_and_risk(df):
         'missed_doses': missed,
         'records': df.to_dict(orient='records')
     }
+    
+def check_compliance_and_risk(df):
+    required_columns = ['heart_rate', 'blood_oxygen', 'med_taken']
+    missing = [col for col in required_columns if col not in df.columns]
+    if missing:
+        return f"Missing columns: {missing}"  # changed from raise error
+    ...
 
