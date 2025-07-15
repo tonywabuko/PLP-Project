@@ -3,7 +3,8 @@ pandas
 joblib
 python-dotenv
 twilio
-scikit-learn
+scikit-learn==1.1.3
+
 
 
 
