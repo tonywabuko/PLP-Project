@@ -3,5 +3,7 @@ pandas
 joblib
 python-dotenv
 twilio
+scikit-learn
+
 
 
